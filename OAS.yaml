@@ -1,734 +1,3144 @@
 openapi: 3.0.3
-servers:
-  - url: localhost/api
+x-stoplight:
+  id: q0ox6g648fmme
 info:
-  description: 'This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.'
-  version: 1.0.0
-  title: Swagger Petstore
-  termsOfService: 'http://swagger.io/terms/'
+  title: Berichten Service
+  description: 'De Berichtenservice faciliteert het versturen van berichten (bijvoorbeeld aan de hand van WRC sjablonen) en het rapporteren daarover. Hiervoor levert het zowel bulk-capaciteiten (voor bijvoorbeeld het versturen van mailings), als opvolg-capaciteiten (voor het controleren van bijvoorbeeld het aankomen van emails). Vooralsnog ondersteunt de Berichtenservice het versturen van mails en sms-berichten, maar er wordt nagedacht over het toevoegen van een post route en chatfunctionaliteit (social media). Het kan hierbij zowel zelfstandig opereren, als een front leveren voor functionaliteit van derden (Mailgun, Mailchimp, Messagbird, etc)'
+  version: V1.0
   contact:
-    email: apiteam@swagger.io
+    name: Ruben van der LInde
+    url: www.conduction.nl
+    email: ruben@conduction.nl
   license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-tags:
-  - name: pet
-    description: Everything about your Pets
-    externalDocs:
-      description: Find out more
-      url: 'http://swagger.io'
-  - name: store
-    description: Access to Petstore orders
-  - name: user
-    description: Operations about user
-    externalDocs:
-      description: Find out more about our store
-      url: 'http://swagger.io'
+    name: EUPL
+servers:
+  - description: ''
 paths:
-  /pet:
-    post:
-      tags:
-        - pet
-      summary: Add a new pet to the store
-      description: ''
-      operationId: addPet
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      description: ''
-      operationId: updatePet
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-  /pet/findByStatus:
+  /messages:
     get:
+      operationId: getMessageCollection
       tags:
-        - pet
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
-      parameters:
-        - name: status
-          in: query
-          description: Status values that need to be considered for filter
-          required: true
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - available
-                - pending
-                - sold
-              default: available
+        - Message
       responses:
         '200':
-          description: successful operation
+          description: Message collection
           content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/json+ld:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            application/json+hal:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            application/vnd.api+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            application/json+vnd.api:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            application/health+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            application/json+health:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Pet'
-            application/json:
+                  $ref: '#/components/schemas/Message'
+            application/x-yaml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid status value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/findByTags:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by tags
-      description: 'Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.'
-      operationId: findPetsByTags
+                  $ref: '#/components/schemas/Message'
+            text/csv:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+      summary: Retrieves the collection of Message resources.
+      description: Retrieves the collection of Message resources.
       parameters:
-        - name: tags
+        - name: page
           in: query
-          description: Tags to filter by
-          required: true
-          explode: true
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid tag value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      deprecated: true
-  '/pet/{petId}':
-    get:
-      tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to return
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - api_key: []
-    post:
-      tags:
-        - pet
-      summary: Updates a pet in the store with form data
-      description: ''
-      operationId: updatePetWithForm
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  description: Updated name of the pet
-                  type: string
-                status:
-                  description: Updated status of the pet
-                  type: string
-    delete:
-      tags:
-        - pet
-      summary: Deletes a pet
-      description: ''
-      operationId: deletePet
-      parameters:
-        - name: api_key
-          in: header
+          description: The collection page number
           required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+        - name: limit
+          in: query
+          description: The number of items per page
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 30
+            minimum: 0
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[id]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
           schema:
             type: string
-        - name: petId
-          in: path
-          description: Pet id to delete
-          required: true
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[reciever]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
           schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}/uploadImage':
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[sender]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[subject]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[content]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[type]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[resource]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[data]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[status]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[externalServiceId]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[send]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateCreated]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateModified]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'send[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'send[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'send[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'send[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: type
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'type[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: resource
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'resource[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+      deprecated: false
     post:
+      operationId: postMessageCollection
       tags:
-        - pet
-      summary: uploads an image
-      description: ''
-      operationId: uploadFile
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to update
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - Message
       responses:
-        '200':
-          description: successful operation
+        '201':
+          description: Message resource created
           content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Message'
+            application/json+ld:
+              schema:
+                $ref: '#/components/schemas/Message'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Message'
+            application/json+hal:
+              schema:
+                $ref: '#/components/schemas/Message'
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Message'
+            application/json+vnd.api:
+              schema:
+                $ref: '#/components/schemas/Message'
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                additionalMetadata:
-                  description: Additional data to pass to server
-                  type: string
-                file:
-                  description: file to upload
-                  type: string
-                  format: binary
-  /store/inventory:
-    get:
-      tags:
-        - store
-      summary: Returns pet inventories by status
-      description: Returns a map of status codes to quantities
-      operationId: getInventory
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
+                $ref: '#/components/schemas/Message'
+            application/health+json:
               schema:
-                $ref: '#/components/schemas/Inventory'
-      security:
-        - api_key: []
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Place an order for a pet
-      description: ''
-      operationId: placeOrder
-      responses:
-        '200':
-          description: successful operation
-          content:
+                $ref: '#/components/schemas/Message'
+            application/json+health:
+              schema:
+                $ref: '#/components/schemas/Message'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Order'
-            application/json:
+                $ref: '#/components/schemas/Message'
+            application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/Message'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/Message'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Message'
+          links:
+            GetMessageItem:
+              operationId: getMessageItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /messages/{id}`.'
         '400':
-          description: Invalid Order
+          description: Invalid input
+        '422':
+          description: Unprocessable entity
+      summary: Creates a Message resource.
+      description: Creates a Message resource.
+      parameters: []
       requestBody:
+        description: The new Message resource
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
-        description: order placed for purchasing the pet
+              $ref: '#/components/schemas/Message'
         required: true
-  '/store/order/{orderId}':
+      deprecated: false
+    parameters: []
+  '/messages/{id}':
     get:
+      operationId: getMessageItem
       tags:
-        - store
-      summary: Find purchase order by ID
-      description: For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions
-      operationId: getOrderById
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of pet that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-            maximum: 10
+        - Message
       responses:
         '200':
-          description: successful operation
+          description: Message resource
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid ID supplied
+                $ref: '#/components/schemas/Message'
         '404':
-          description: Order not found
-    delete:
-      tags:
-        - store
-      summary: Delete purchase order by ID
-      description: For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors
-      operationId: deleteOrder
+          description: Resource not found
+      summary: Retrieves a Message resource.
+      description: Retrieves a Message resource.
       parameters:
-        - name: orderId
+        - name: id
           in: path
-          description: ID of the order that needs to be deleted
+          description: Resource identifier
           required: true
+          deprecated: false
+          allowEmptyValue: false
           schema:
-            type: integer
-            format: int64
-            minimum: 1
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    put:
+      operationId: putMessageItem
+      tags:
+        - Message
       responses:
         '200':
-          description: OK
+          description: Message resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          links:
+            GetMessageItem:
+              operationId: getMessageItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /messages/{id}`.'
         '400':
-          description: Invalid ID supplied
+          description: Invalid input
         '404':
-          description: Order not found
-  # /user:
-  #   post:
-  #     tags:
-  #       - user
-  #     summary: Create user
-  #     description: This can only be done by the logged in user.
-  #     operationId: createUser
-  #     responses:
-  #       default:
-  #         description: successful operation
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/User'
-  #       description: Created user object
-  #       required: true
-  # /user/createWithArray:
-  #   post:
-  #     tags:
-  #       - user
-  #     summary: Creates list of users with given input array
-  #     description: ''
-  #     operationId: createUsersWithArrayInput
-  #     responses:
-  #       default:
-  #         description: successful operation
-  #     requestBody:
-  #       $ref: '#/components/requestBodies/UserArray'
-  # /user/createWithList:
-  #   post:
-  #     tags:
-  #       - user
-  #     summary: Creates list of users with given input array
-  #     description: ''
-  #     operationId: createUsersWithListInput
-  #     responses:
-  #       default:
-  #         description: successful operation
-  #     requestBody:
-  #       $ref: '#/components/requestBodies/UserArray'
-  # /user/login:
-  #   get:
-  #     tags:
-  #       - user
-  #     summary: Logs user into the system
-  #     description: ''
-  #     operationId: loginUser
-  #     parameters:
-  #       - name: username
-  #         in: query
-  #         description: The user name for login
-  #         required: true
-  #         schema:
-  #           type: string
-  #       - name: password
-  #         in: query
-  #         description: The password for login in clear text
-  #         required: true
-  #         schema:
-  #           type: string
-  #     responses:
-  #       '200':
-  #         description: successful operation
-  #         headers:
-  #           X-Rate-Limit:
-  #             description: calls per hour allowed by the user
-  #             schema:
-  #               type: integer
-  #               format: int32
-  #           X-Expires-After:
-  #             description: date in UTC when token expires
-  #             schema:
-  #               type: string
-  #               format: date-time
-  #         content:
-  #           application/xml:
-  #             schema:
-  #               type: string
-  #           application/json:
-  #             schema:
-  #               type: string
-  #       '400':
-  #         description: Invalid username/password supplied
-  # /user/logout:
-  #   get:
-  #     tags:
-  #       - user
-  #     summary: Logs out current logged in user session
-  #     description: ''
-  #     operationId: logoutUser
-  #     responses:
-  #       default:
-  #         description: successful operation
-  # '/user/{username}':
-    # get:
-    #   tags:
-    #     - user
-    #   summary: Get user by user name
-    #   description: ''
-    #   operationId: getUserByName
-    #   parameters:
-    #     - name: username
-    #       in: path
-    #       description: 'The name that needs to be fetched. Use user1 for testing. '
-    #       required: true
-    #       schema:
-    #         type: string
-    #   responses:
-    #     '200':
-    #       description: successful operation
-    #       content:
-    #         application/xml:
-    #           schema:
-    #             $ref: '#/components/schemas/User'
-    #         application/json:
-    #           schema:
-    #             $ref: '#/components/schemas/User'
-    #     '400':
-    #       description: Invalid username supplied
-    #     '404':
-    #       description: User not found
-    # put:
-    #   tags:
-    #     - user
-    #   summary: Updated user
-    #   description: This can only be done by the logged in user.
-    #   operationId: updateUser
-    #   parameters:
-    #     - name: username
-    #       in: path
-    #       description: name that need to be updated
-    #       required: true
-    #       schema:
-    #         type: string
-    #   responses:
-    #     '200':
-    #       description: OK
-    #     '400':
-    #       description: Invalid user supplied
-    #     '404':
-    #       description: User not found
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           $ref: '#/components/schemas/User'
-    #     description: Updated user object
-    #     required: true
-    # delete:
-      # tags:
-      #   - user
-      # summary: Delete user
-      # description: This can only be done by the logged in user.
-      # operationId: deleteUser
-      # parameters:
-      #   - name: username
-      #     in: path
-      #     description: The name that needs to be deleted
-      #     required: true
-      #     schema:
-      #       type: string
-      # responses:
-      #   '200':
-      #     description: OK
-      #   '400':
-      #     description: Invalid username supplied
-      #   '404':
-      #     description: User not found
-externalDocs:
-  description: Find out more about Swagger
-  url: 'http://swagger.io'
+          description: Resource not found
+        '422':
+          description: Unprocessable entity
+      summary: Replaces the Message resource.
+      description: Replaces the Message resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: The updated Message resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      deprecated: false
+    delete:
+      operationId: deleteMessageItem
+      tags:
+        - Message
+      responses:
+        '204':
+          description: Message resource deleted
+        '404':
+          description: Resource not found
+      summary: Removes the Message resource.
+      description: Removes the Message resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    parameters: []
+  /send_lists:
+    get:
+      operationId: getSendListCollection
+      tags:
+        - SendList
+      responses:
+        '200':
+          description: SendList collection
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SendList'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/json+ld:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SendList'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/json+hal:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/vnd.api+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/json+vnd.api:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/health+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/json+health:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            application/x-yaml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            text/csv:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SendList'
+      summary: Retrieves the collection of SendList resources.
+      description: Retrieves the collection of SendList resources.
+      parameters:
+        - name: page
+          in: query
+          description: The collection page number
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+        - name: limit
+          in: query
+          description: The number of items per page
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 30
+            minimum: 0
+          style: form
+          explode: false
+          allowReserved: false
+        - name: mail
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: boolean
+          style: form
+          explode: false
+          allowReserved: false
+        - name: phone
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: boolean
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[id]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[name]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[description]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[mail]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[phone]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[organization]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[resource]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateCreated]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateModified]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: organization
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'organization[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: resource
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'resource[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+      deprecated: false
+    post:
+      operationId: postSendListCollection
+      tags:
+        - SendList
+      responses:
+        '201':
+          description: SendList resource created
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/json+ld:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/json+hal:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/json+vnd.api:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/health+json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/json+health:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            application/x-yaml:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/SendList'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/SendList'
+          links:
+            GetSendListItem:
+              operationId: getSendListItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /send_lists/{id}`.'
+        '400':
+          description: Invalid input
+        '422':
+          description: Unprocessable entity
+      summary: Creates a SendList resource.
+      description: Creates a SendList resource.
+      parameters: []
+      requestBody:
+        description: The new SendList resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendList'
+        required: true
+      deprecated: false
+    parameters: []
+  '/send_lists/{id}':
+    get:
+      operationId: getSendListItem
+      tags:
+        - SendList
+      responses:
+        '200':
+          description: SendList resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+        '404':
+          description: Resource not found
+      summary: Retrieves a SendList resource.
+      description: Retrieves a SendList resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    put:
+      operationId: putSendListItem
+      tags:
+        - SendList
+      responses:
+        '200':
+          description: SendList resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+          links:
+            GetSendListItem:
+              operationId: getSendListItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /send_lists/{id}`.'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+        '422':
+          description: Unprocessable entity
+      summary: Replaces the SendList resource.
+      description: Replaces the SendList resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: The updated SendList resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendList'
+        required: true
+      deprecated: false
+    delete:
+      operationId: deleteSendListItem
+      tags:
+        - SendList
+      responses:
+        '204':
+          description: SendList resource deleted
+        '404':
+          description: Resource not found
+      summary: Removes the SendList resource.
+      description: Removes the SendList resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    patch:
+      operationId: patchSendListItem
+      tags:
+        - SendList
+      responses:
+        '200':
+          description: SendList resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendList'
+          links:
+            GetSendListItem:
+              operationId: getSendListItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /send_lists/{id}`.'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+        '422':
+          description: Unprocessable entity
+      summary: Updates the SendList resource.
+      description: Updates the SendList resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: The updated SendList resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendList'
+        required: true
+      deprecated: false
+    parameters: []
+  /services:
+    get:
+      operationId: getServiceCollection
+      tags:
+        - Service
+      responses:
+        '200':
+          description: Service collection
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/json+ld:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/json+hal:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/vnd.api+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/json+vnd.api:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/health+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/json+health:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            application/x-yaml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            text/csv:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+      summary: Retrieves the collection of Service resources.
+      description: Retrieves the collection of Service resources.
+      parameters:
+        - name: page
+          in: query
+          description: The collection page number
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+        - name: limit
+          in: query
+          description: The number of items per page
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 30
+            minimum: 0
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[id]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[type]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[organization]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[authorization]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[configuration]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateCreated]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateModified]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: id
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'id[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: type
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'type[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: organization
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'organization[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: authorization
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'authorization[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: configuration
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'configuration[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: dateCreated
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: dateModified
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+      deprecated: false
+    post:
+      operationId: postServiceCollection
+      tags:
+        - Service
+      responses:
+        '201':
+          description: Service resource created
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/json+ld:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/json+hal:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/json+vnd.api:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/health+json:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/json+health:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Service'
+            application/x-yaml:
+              schema:
+                $ref: '#/components/schemas/Service'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/Service'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Service'
+          links:
+            GetServiceItem:
+              operationId: getServiceItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /services/{id}`.'
+        '400':
+          description: Invalid input
+        '422':
+          description: Unprocessable entity
+      summary: Creates a Service resource.
+      description: Creates a Service resource.
+      parameters: []
+      requestBody:
+        description: The new Service resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      deprecated: false
+    parameters: []
+  '/services/{id}':
+    get:
+      operationId: getServiceItem
+      tags:
+        - Service
+      responses:
+        '200':
+          description: Service resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        '404':
+          description: Resource not found
+      summary: Retrieves a Service resource.
+      description: Retrieves a Service resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    put:
+      operationId: putServiceItem
+      tags:
+        - Service
+      responses:
+        '200':
+          description: Service resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+          links:
+            GetServiceItem:
+              operationId: getServiceItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /services/{id}`.'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+        '422':
+          description: Unprocessable entity
+      summary: Replaces the Service resource.
+      description: Replaces the Service resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: The updated Service resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      deprecated: false
+    delete:
+      operationId: deleteServiceItem
+      tags:
+        - Service
+      responses:
+        '204':
+          description: Service resource deleted
+        '404':
+          description: Resource not found
+      summary: Removes the Service resource.
+      description: Removes the Service resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    parameters: []
+  /subscribers:
+    get:
+      operationId: getSubscriberCollection
+      tags:
+        - Subscriber
+      responses:
+        '200':
+          description: Subscriber collection
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Subscriber'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/json+ld:
+              schema:
+                type: object
+                properties:
+                  'hydra:member':
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Subscriber'
+                  'hydra:totalItems':
+                    type: integer
+                    minimum: 0
+                  'hydra:view':
+                    type: object
+                    properties:
+                      '@id':
+                        type: string
+                        format: iri-reference
+                      '@type':
+                        type: string
+                      'hydra:first':
+                        type: string
+                        format: iri-reference
+                      'hydra:last':
+                        type: string
+                        format: iri-reference
+                      'hydra:previous':
+                        type: string
+                        format: iri-reference
+                      'hydra:next':
+                        type: string
+                        format: iri-reference
+                  'hydra:search':
+                    type: object
+                    properties:
+                      '@type':
+                        type: string
+                      'hydra:template':
+                        type: string
+                      'hydra:variableRepresentation':
+                        type: string
+                      'hydra:mapping':
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '@type':
+                              type: string
+                            variable:
+                              type: string
+                            property:
+                              type: string
+                              nullable: true
+                            required:
+                              type: boolean
+                required:
+                  - 'hydra:member'
+            application/hal+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/json+hal:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/vnd.api+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/json+vnd.api:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/health+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/json+health:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            application/x-yaml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            text/csv:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscriber'
+      summary: Retrieves the collection of Subscriber resources.
+      description: Retrieves the collection of Subscriber resources.
+      parameters:
+        - name: page
+          in: query
+          description: The collection page number
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+        - name: limit
+          in: query
+          description: The number of items per page
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 30
+            minimum: 0
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[id]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[email]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[resource]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateInvited]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateAcceptedOrganization]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateAcceptedUser]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateCreated]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'order[dateModified]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateInvited[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateInvited[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateInvited[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateInvited[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedOrganization[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedOrganization[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedOrganization[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedOrganization[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedUser[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedUser[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedUser[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateAcceptedUser[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateCreated[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_before]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'dateModified[strictly_after]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: email
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'email[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+        - name: resource
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+        - name: 'resource[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          allowReserved: false
+      deprecated: false
+    post:
+      operationId: postSubscriberCollection
+      tags:
+        - Subscriber
+      responses:
+        '201':
+          description: Subscriber resource created
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/json+ld:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/json+hal:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/json+vnd.api:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/health+json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/json+health:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            application/x-yaml:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+          links:
+            GetSubscriberItem:
+              operationId: getSubscriberItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /subscribers/{id}`.'
+        '400':
+          description: Invalid input
+        '422':
+          description: Unprocessable entity
+      summary: Creates a Subscriber resource.
+      description: Creates a Subscriber resource.
+      parameters: []
+      requestBody:
+        description: The new Subscriber resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscriber'
+        required: true
+      deprecated: false
+    parameters: []
+  '/subscribers/{id}':
+    get:
+      operationId: getSubscriberItem
+      tags:
+        - Subscriber
+      responses:
+        '200':
+          description: Subscriber resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+        '404':
+          description: Resource not found
+      summary: Retrieves a Subscriber resource.
+      description: Retrieves a Subscriber resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    put:
+      operationId: putSubscriberItem
+      tags:
+        - Subscriber
+      responses:
+        '200':
+          description: Subscriber resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+          links:
+            GetSubscriberItem:
+              operationId: getSubscriberItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /subscribers/{id}`.'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+        '422':
+          description: Unprocessable entity
+      summary: Replaces the Subscriber resource.
+      description: Replaces the Subscriber resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: The updated Subscriber resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscriber'
+        required: true
+      deprecated: false
+    delete:
+      operationId: deleteSubscriberItem
+      tags:
+        - Subscriber
+      responses:
+        '204':
+          description: Subscriber resource deleted
+        '404':
+          description: Resource not found
+      summary: Removes the Subscriber resource.
+      description: Removes the Subscriber resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    patch:
+      operationId: patchSubscriberItem
+      tags:
+        - Subscriber
+      responses:
+        '200':
+          description: Subscriber resource updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscriber'
+          links:
+            GetSubscriberItem:
+              operationId: getSubscriberItem
+              parameters:
+                id: $response.body#/id
+              description: 'The `id` value returned in the response can be used as the `id` parameter in `GET /subscribers/{id}`.'
+        '400':
+          description: Invalid input
+        '404':
+          description: Resource not found
+        '422':
+          description: Unprocessable entity
+      summary: Updates the Subscriber resource.
+      description: Updates the Subscriber resource.
+      parameters:
+        - name: id
+          in: path
+          description: Resource identifier
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: The updated Subscriber resource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscriber'
+        required: true
+      deprecated: false
+    parameters: []
 components:
-  responses:
-    PetResponse:
-      description: successful operation
-      content:
-        application/xml:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Pet'
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Pet'
-    UserResponse:
-      description: User response
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
-  requestBodies:
-    UserArray:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
-      description: List of user object
-      required: true
-    Pet:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Pet'
-        application/xml:
-          schema:
-            $ref: '#/components/schemas/Pet'
-      description: Pet object that needs to be added to the store
-      required: true
-  securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
-          scopes:
-            'write:pets': modify pets in your account
-            'read:pets': read your pets
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
   schemas:
-    Order:
+    Attachment:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        petId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-        shipDate:
-          type: string
-          format: date-time
-        status:
-          type: string
-          description: Order Status
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          type: boolean
-          default: false
-      xml:
-        name: Order
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        username:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        phone:
-          type: string
-        userStatus:
-          type: integer
-          format: int32
-          description: User Status
-      xml:
-        name: User
-    Category:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
         name:
           type: string
-      xml:
-        name: Category
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
+        uri:
+          maxLength: 255
+          description: Either a contact component person or contact list that will recieve this message
+          externalDocs:
+            url: 'http://schema.org/url'
           type: string
-      xml:
-        name: Tag
-    Pet:
-      type: object
-      required:
-        - name
-        - photoUrls
-      properties:
-        id:
-          type: integer
-          format: int64
-        category:
-          $ref: '#/components/schemas/Category'
-        name:
+          nullable: true
+        mime:
           type: string
-          example: doggie
-        photoUrls:
+        resources:
           type: array
-          xml:
-            name: photoUrl
-            wrapped: true
           items:
             type: string
-        tags:
-          type: array
-          xml:
-            name: tag
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
-        status:
+    Message:
+      type: object
+      description: A  message to be send to a spefic recipient or list troug a message service.
+      properties:
+        reciever:
+          maxLength: 255
+          description: Either a contact component person or contact list or an plain email that will recieve this message
           type: string
-          description: pet status in the store
-          enum:
-            - available
-            - pending
-            - sold
-      xml:
-        name: Pet
-    Inventory:
-      type: object
-      properties:
-        additionalProperty:
-          type: integer
-          format: int32
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
+          nullable: true
+        sender:
+          maxLength: 255
+          description: 'Either a contact component person, or wrc application or an plain email that sends this message'
+          type: string
+          nullable: true
+        subject:
+          maxLength: 255
+          description: subject of the mail
+          type: string
+          nullable: true
+        content:
+          description: The webresource template object (from wrc) that is used as content for this message
+          type: string
         type:
+          maxLength: 255
+          description: The type of this message.
           type: string
-        message:
+          nullable: true
+        resource:
+          maxLength: 255
+          description: A resource used for this message.
+          externalDocs:
+            url: 'http://schema.org/url'
           type: string
-  examples:
-    Order:
-      value:
-        quantity: 1
-        shipDate: '2018-10-19T16:46:45Z'
-        status: placed
-        complete: false
+          nullable: true
+        data:
+          type: array
+          items:
+            type: string
+          nullable: true
+        status:
+          maxLength: 255
+          description: The current status of this message
+          type: string
+        service:
+          description: The service used to send this message
+          $ref: '#/components/schemas/Service'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+    SendList:
+      type: object
+      description: SendList is a way for Organizations to send messages through email or phone.
+      required:
+        - name
+        - organization
+      properties:
+        name:
+          maxLength: 255
+          description: The name of this SendList.
+          type: string
+        description:
+          maxLength: 255
+          description: The description of this SendList.
+          type: string
+          nullable: true
+        mail:
+          description: True if this is an mailing list.
+          type: boolean
+        phone:
+          description: True if this is an phone list.
+          type: boolean
+        organization:
+          maxLength: 255
+          description: An organization in Web Resource Catalogus (Will mostly be the id-vault application->organization)
+          type: string
+        resource:
+          maxLength: 255
+          description: A extra resource (Mostly used if this list is for an organization in a id-vault application)
+          type: string
+          nullable: true
+        subscribers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscriber'
+    Service:
+      type: object
+      description: A service that sends messages e.g. email or sms.
+      properties:
+        type:
+          maxLength: 255
+          description: 'The type of this service, iether use a pre configures service or just plain simple old smtp'
+          type: string
+        organization:
+          maxLength: 255
+          description: The RSIN of the organization that ownes this service
+          type: string
+        authorization:
+          maxLength: 255
+          description: The autorization be it password or api key that is used to connect to the service
+          type: string
+          nullable: true
+        configuration:
+          description: Any specific setting for this service
+          type: array
+          items:
+            type: string
+      required:
+        - organization
+        - authorization
+    Subscriber:
+      type: object
+      description: SendList is a way for Applications to send messages through email or phone.
+      properties:
+        email:
+          maxLength: 255
+          description: email of the subscriber
+          type: string
+          nullable: true
+        resource:
+          maxLength: 255
+          description: 'resource of this subscriber, for example: wac/group, uc/user or cc/person'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+          nullable: true
+        dateAcceptedOrganization:
+          description: The moment the invite was accepted by the organization
+          type: string
+          format: date-time
+          nullable: true
+        dateAcceptedUser:
+          description: The moment the invite was accepted by the user
+          type: string
+          format: date-time
+          nullable: true
+        sendLists:
+          type: array
+          items:
+            $ref: '#/components/schemas/SendList'
+      required:
+        - sendLists
+  responses: {}
+  parameters: {}
+  examples: {}
+  requestBodies: {}
+  headers: {}
+  securitySchemes: {}
+security: []
+tags: []
